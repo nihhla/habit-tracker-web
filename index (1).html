@@ -1,0 +1,277 @@
+
+raw
+Index · HTML
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habits — Your Daily Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ 
+  <!-- ═══ AUTH SCREEN ═══ -->
+  <div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+ 
+      <div class="auth-logo">
+        <span class="auth-logo-icon">◈</span>
+        <span class="auth-logo-text">Habits</span>
+      </div>
+      <p class="auth-tagline">Build streaks. Track progress. Stay consistent.</p>
+ 
+      <!-- Tab switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin"  data-tab="login">Sign in</button>
+        <button class="auth-tab"        id="tabSignup" data-tab="signup">Create account</button>
+      </div>
+ 
+      <!-- LOGIN FORM -->
+      <form class="auth-form" id="loginForm" novalidate>
+        <div class="auth-field">
+          <label class="auth-field-label" for="loginEmail">Email</label>
+          <input class="auth-input" type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label class="auth-field-label" for="loginPassword">Password</label>
+          <div class="auth-input-wrap">
+            <input class="auth-input" type="password" id="loginPassword" placeholder="Your password" autocomplete="current-password" />
+            <button type="button" class="auth-eye" data-target="loginPassword">👁</button>
+          </div>
+        </div>
+        <p class="auth-error" id="loginError"></p>
+        <button type="submit" class="auth-submit" id="loginSubmit">Sign in</button>
+      </form>
+ 
+      <!-- SIGNUP FORM -->
+      <form class="auth-form hidden" id="signupForm" novalidate>
+        <div class="auth-field">
+          <label class="auth-field-label" for="signupName">Name</label>
+          <input class="auth-input" type="text" id="signupName" placeholder="Your name" autocomplete="name" maxlength="40" />
+        </div>
+        <div class="auth-field">
+          <label class="auth-field-label" for="signupEmail">Email</label>
+          <input class="auth-input" type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="auth-field">
+          <label class="auth-field-label" for="signupPassword">Password</label>
+          <div class="auth-input-wrap">
+            <input class="auth-input" type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password" />
+            <button type="button" class="auth-eye" data-target="signupPassword">👁</button>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label class="auth-field-label" for="signupConfirm">Confirm password</label>
+          <div class="auth-input-wrap">
+            <input class="auth-input" type="password" id="signupConfirm" placeholder="Repeat password" autocomplete="new-password" />
+            <button type="button" class="auth-eye" data-target="signupConfirm">👁</button>
+          </div>
+        </div>
+        <p class="auth-error" id="signupError"></p>
+        <button type="submit" class="auth-submit" id="signupSubmit">Create account</button>
+      </form>
+ 
+    </div>
+  </div>
+ 
+  <!-- ═══ APP (hidden until logged in) ═══ -->
+  <div class="app-shell hidden" id="appShell">
+ 
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">◈</span>
+        <span class="logo-text">Habits</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+ 
+    <!-- User info -->
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" id="userAvatar"></div>
+      <div class="sidebar-user-info">
+        <p class="sidebar-user-name" id="userName"></p>
+        <p class="sidebar-user-email" id="userEmail"></p>
+      </div>
+      <button class="sidebar-logout" id="logoutBtn" title="Sign out">⇥</button>
+    </div>
+ 
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-view="today">
+        <span class="nav-icon">◎</span> Today
+      </button>
+      <button class="nav-item" data-view="stats">
+        <span class="nav-icon">◈</span> Statistics
+      </button>
+      <button class="nav-item" data-view="history">
+        <span class="nav-icon">▦</span> History
+      </button>
+    </nav>
+ 
+    <div class="sidebar-section-label">MY HABITS</div>
+    <ul class="habit-list" id="habitList"></ul>
+ 
+    <button class="add-habit-btn" id="openAddHabit">
+      <span>＋</span> Add habit
+    </button>
+  </aside>
+ 
+  <!-- Main -->
+  <main class="main" id="mainContent">
+ 
+    <!-- TODAY VIEW -->
+    <section class="view active" id="view-today">
+      <header class="page-header">
+        <div>
+          <p class="page-eyebrow" id="todayDate"></p>
+          <h1 class="page-title">Today</h1>
+        </div>
+        <div class="header-stats">
+          <div class="mini-stat">
+            <span class="mini-stat-num" id="todayCompletedCount">0</span>
+            <span class="mini-stat-label">done</span>
+          </div>
+          <div class="mini-stat-divider">/</div>
+          <div class="mini-stat">
+            <span class="mini-stat-num" id="todayTotalCount">0</span>
+            <span class="mini-stat-label">total</span>
+          </div>
+          <div class="today-progress-ring">
+            <svg viewBox="0 0 36 36" class="ring-svg">
+              <circle class="ring-bg" cx="18" cy="18" r="15.9"/>
+              <circle class="ring-fill" id="ringFill" cx="18" cy="18" r="15.9" stroke-dasharray="0 100"/>
+            </svg>
+          </div>
+        </div>
+      </header>
+ 
+      <div class="today-habits-grid" id="todayGrid">
+        <div class="empty-state" id="emptyToday">
+          <p class="empty-icon">◎</p>
+          <p class="empty-title">No habits yet</p>
+          <p class="empty-sub">Add your first habit to get started.</p>
+          <button class="btn-primary" onclick="document.getElementById('openAddHabit').click()">Add a habit</button>
+        </div>
+      </div>
+    </section>
+ 
+    <!-- STATS VIEW -->
+    <section class="view" id="view-stats">
+      <header class="page-header">
+        <div>
+          <p class="page-eyebrow">OVERVIEW</p>
+          <h1 class="page-title">Statistics</h1>
+        </div>
+      </header>
+ 
+      <div class="stats-grid">
+        <div class="stat-card highlight">
+          <p class="stat-label">BEST STREAK</p>
+          <p class="stat-value flame" id="statBestStreak">0 <span class="flame-icon">🔥</span></p>
+          <p class="stat-sub">days in a row</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">THIS WEEK</p>
+          <p class="stat-value" id="statWeekRate">0%</p>
+          <p class="stat-sub">completion rate</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">ALL TIME</p>
+          <p class="stat-value" id="statAllTime">0</p>
+          <p class="stat-sub">completions</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-label">PERFECT DAYS</p>
+          <p class="stat-value" id="statPerfectDays">0</p>
+          <p class="stat-sub">all habits done</p>
+        </div>
+      </div>
+ 
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2 class="section-title">Weekly Progress</h2>
+          <div class="chart-legend">
+            <span class="legend-dot completed"></span><span>Completed</span>
+            <span class="legend-dot missed"></span><span>Missed</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="weekChart"></canvas>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+        <div class="chart-labels" id="chartLabels"></div>
+      </div>
+ 
+      <div class="habit-breakdown">
+        <h2 class="section-title">Per Habit</h2>
+        <div id="habitBreakdownList"></div>
+      </div>
+    </section>
+ 
+    <!-- HISTORY VIEW -->
+    <section class="view" id="view-history">
+      <header class="page-header">
+        <div>
+          <p class="page-eyebrow">LAST 30 DAYS</p>
+          <h1 class="page-title">History</h1>
+        </div>
+      </header>
+      <div class="heatmap-section">
+        <p class="section-title">Completion Heatmap</p>
+        <div class="heatmap-container" id="heatmap"></div>
+        <div class="heatmap-legend">
+          <span>Less</span>
+          <span class="heatmap-cell heatmap-0"></span>
+          <span class="heatmap-cell heatmap-1"></span>
+          <span class="heatmap-cell heatmap-2"></span>
+          <span class="heatmap-cell heatmap-3"></span>
+          <span class="heatmap-cell heatmap-4"></span>
+          <span>More</span>
+        </div>
+      </div>
+      <div class="history-log">
+        <p class="section-title">Log</p>
+        <div id="historyLog"></div>
+      </div>
+    </section>
+ 
+  </main>
+ 
+  <!-- Add/Edit Habit Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="habitModal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">New Habit</h2>
+        <button class="modal-close" id="closeModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label class="field-label">Name</label>
+        <input type="text" class="field-input" id="habitNameInput" placeholder="e.g. Morning run, Read 20 pages…" maxlength="50" />
+ 
+        <label class="field-label">Icon</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+ 
+        <label class="field-label">Color</label>
+        <div class="color-grid" id="colorGrid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="deleteHabitBtn" style="display:none">Delete</button>
+        <div style="flex:1"></div>
+        <button class="btn-secondary" id="cancelModal">Cancel</button>
+        <button class="btn-primary" id="saveHabit">Save</button>
+      </div>
+    </div>
+  </div>
+ 
+  </div><!-- /app-shell -->
+ 
+  <script src="script.js"></script>
+</body>
+</html>
