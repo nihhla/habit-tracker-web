@@ -1,6 +1,3 @@
-// ============================================
-//  HABIT TRACKER — Full App Logic + Auth
-// ============================================
 
 // ─── Auth constants ───────────────────────────
 const USERS_KEY    = 'habitTracker_users';    // { email: { name, passwordHash, uid } }
